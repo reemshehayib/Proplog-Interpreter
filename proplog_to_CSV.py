@@ -131,7 +131,7 @@ def pl_file_to_pl_object(path):
         exit(1)
 
 
-# Turns a PL object into the wff dict used by pl_csv.py
+# Turns a PL object into the wff dict used by proplog_to_CSV_CNF.py
 def pl_object_to_wff(pl, problem_id=1, title=None):
     num = pl.atom_numbers()
     statements = [(kind, num[head] if head else None, [num[a] for a in body])
