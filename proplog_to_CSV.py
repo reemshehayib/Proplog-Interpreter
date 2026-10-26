@@ -14,7 +14,7 @@ import os
 import re
 import sys
 
-from pl_csv import write_pl_csv
+from proplog_to_CSV_CNF import write_pl_csv
 
 IDENT = re.compile(r'[a-z_][A-Za-z0-9_]*$')
 
