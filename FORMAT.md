@@ -72,7 +72,7 @@ classified by its number of positive literals (1 and alone = fact, 1 plus negati
 rule, 0 = query). A clause with two or more positive literals is not Horn and is
 rejected with an error, because Proplog cannot express it.
 
-Every Proplog CSV written by the tools has a companion `*_cnf.csv` in plain CNF form,
+Every Proplog CSV written by the tools has a companion `*.pl.cnf.csv` in plain CNF form,
 which is what Brute-SAT reads.
 
 ## 3. Proplog text (`.pl`)
@@ -87,4 +87,4 @@ have_food :- get_to_store, have_money.  % rule
 
 Identifiers start with a lowercase letter or `_`. Atoms are numbered in order of
 first appearance. `make_examples.py` compiles every `examples/*.pl` into
-`examples/puzzles.csv`.
+`examples/puzzles.pl.csv` (problem numbers 1, 2, ... in file-name order).
