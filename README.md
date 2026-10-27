@@ -36,7 +36,7 @@ python3 run_brute.py examples/picnic.pl.csv           # label it with Brute-SAT
 python3 proplog_solver.py --problem examples/picnic.pl.csv --verbose
 ```
  
- ## Results
+## Results
  
 On all **263** problems that Brute-SAT could solve, the two solvers give the
 same answer. On the 24 large problems, every `S` assignment the Proplog solver
@@ -53,4 +53,4 @@ Taking the median over the problems:
  
 The speedup grows with size because Brute-SAT's work doubles with every extra
 atom while Proplog's barely changes. The slowest problem for Brute-SAT
-(18 atoms) took it 1.35 seconds; Proplog solved it in microseconds
+(18 atoms) took it 1.35 seconds; Proplog solved it in microseconds.
