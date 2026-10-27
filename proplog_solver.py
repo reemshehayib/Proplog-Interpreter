@@ -101,7 +101,7 @@ def find_assignment(problem, result):
 def main(problem_file: str, results_file: str):
     
     with open(results_file, "+w") as file:
-        file.write(f"problem_number,performance_time,result,assignment")
+        file.write("problem_number,performance_time,result,assignment\n")
         
         print(f"Converting {problem_file} to data classes...")
         
@@ -129,8 +129,9 @@ def main(problem_file: str, results_file: str):
             print(f"Result: {result}")
             if assignment is not None:
                 print(f"Assignment: {assignment}")
-            
-            file.write(f"{problem.problem_number},{performance_time},{result},{assignment}\n")
+                file.write(f"{problem.problem_number},{performance_time},{result},{" ".join(map(str, assignment))}\n")
+            else:
+                file.write(f"{problem.problem_number},{performance_time},{result},{None}\n")
     
     
 if __name__=='__main__':
