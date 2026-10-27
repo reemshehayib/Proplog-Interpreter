@@ -19,24 +19,31 @@ class ProplogProblem:
     satisfiable: bool
     names: dict[int,str]
     query: list[int]
+    number_of_atoms: int
 
 def convert_problem_to_class(problem_file):
     with open(problem_file, "r") as file:
         lines = file.readlines()
-        
-        problem = ProplogProblem(set(), [], False, dict(), [])
-        print(problem)
-        
+        problems = []
         for line in lines:
             line = line.strip()
             information_type = line[0]
             
+            if line == "":
+                continue
+            
             if information_type == 'c':#comment line
+                problem = ProplogProblem(set(), [], False, dict(), [], -1)
                 if line[-1] == 'S':
                     problem.satisfiable = True
                 #remember already set to false by default
-            elif information_type == 'p': #not totally sure what the point of this line was in the FORMAT.md
-                pass
+                problems.append(problem)
+                continue
+                
+            problem = problems[-1] #latest problem
+            if information_type == 'p': #number of atoms
+                line = line.split(',')
+                problem.number_of_atoms = int(line[2])
             elif information_type == 'n': #name line
                 line = line.split(',')
                 problem.names[int(line[1])] = line[2]
@@ -53,7 +60,7 @@ def convert_problem_to_class(problem_file):
                 query = [int(m) for m in line[1:-1]]
                 problem.query = query
         
-    return problem
+    return problems
 
 def solve_problem(problem: ProplogProblem):
     '''Solve the problem with forward propogation
@@ -61,32 +68,64 @@ def solve_problem(problem: ProplogProblem):
         General algorithm:
             Go through each rule and check the list
             
-        Returns: True or False for Satisfiable and Unsatisfiable
+        Returns: "Satisfiable" or "Unsatisfiable"
     '''
-    pass
+    pass_number = 1
+    while True:
+        print(f"Pass: {pass_number}")
+        truth_count = len(problem.facts)
+        for rule in problem.rules:
+            conclusion, body = rule
+            add_conclusion = True
+            for potential_fact in body:
+                if potential_fact not in problem.facts:
+                    add_conclusion = False
+                    break
+            if add_conclusion:
+                problem.facts.add(conclusion)
+        if truth_count == len(problem.facts):
+            break
+        pass_number+=1
+    
+    for potential_conclusion in problem.query:
+        if potential_conclusion not in problem.facts:
+            return "Satisfiable"
+        
+    return "Unsatisfiable"
 
+def find_assignment(problem, result):
+    if result == "Satisfiable":
+        return [variable if variable in problem.facts else -variable for variable in range(1, problem.number_of_atoms + 1)]
+    else:
+        return None
+    
 def main(problem_file: str):
-    print(f"Converting {problem_file} to data class...")
+    print(f"Converting {problem_file} to data classes...")
     
     start = perf_counter()
-    problem = convert_problem_to_class(problem_file=problem_file)
+    problems = convert_problem_to_class(problem_file=problem_file)
     end = perf_counter()
     conversion_time = end - start
     
-    print(problem)
-    
-    print(f"Converted in {conversion_time}")
-    
-    print(f"Solving {problem_file}...")
-    
-    start = perf_counter()
-    
-    result = solve_problem(problem=problem)
-    
-    end = perf_counter()
-    performance_time = end - start
-    
-    print(f"Solved in {performance_time}")
+    for problem in problems:
+        print(problem)
+        
+        print(f"Converted in {conversion_time}")
+        
+        print(f"Solving {problem_file}...")
+        
+        start = perf_counter()
+        
+        result = solve_problem(problem=problem)
+        assignment = find_assignment(problem, result)
+        
+        end = perf_counter()
+        performance_time = end - start
+        
+        print(f"Solved in {performance_time}")
+        print(f"Result: {result}")
+        if assignment is not None:
+            print(f"Assignment: {assignment}")
     
     
 if __name__=='__main__':
