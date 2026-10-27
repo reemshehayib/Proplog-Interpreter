@@ -1,6 +1,0 @@
-problem_number,performance_time,result,assignment
-1,2.099998528137803e-05,Unsatisfiable,None
-2,6.954203126952052e-05,Unsatisfiable,None
-3,4.5666005462408066e-05,Satisfiable,1 2 3 -4 -5
-4,6.707967258989811e-06,Satisfiable,-1 -2
-5,7.5830030255019665e-06,Unsatisfiable,None
