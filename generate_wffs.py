@@ -53,8 +53,10 @@ def random_wff(n, max_body, max_queries, rng):
     seen = set()
     for _ in range(rng.randint(n // 2 + 1, 2 * n)):
         head = rng.choice(atoms)
-        others = [a for a in atoms if a != head]
-        body = rng.sample(others, rng.randint(1, min(max_body, len(others))))
+        # = rng.sample([a for a in atoms if a != head], k), without building
+        # that list for every rule (which made large n quadratic)
+        k = rng.randint(1, min(max_body, n - 1))
+        body = [i + 1 if i + 1 < head else i + 2 for i in rng.sample(range(n - 1), k)]
         key = (head, frozenset(body))
         if key not in seen:                 # skip exact duplicate rules
             seen.add(key)
@@ -124,10 +126,15 @@ if __name__ == '__main__':
     ap.add_argument('--seed', type=int, default=0, help='random seed (default 0)')
     ap.add_argument('--start-id', type=int, default=1, help='first problem number (default 1)')
     ap.add_argument('--out', default='data/generated.pl.csv', help='output Proplog CSV')
+    ap.add_argument('--no-cnf', action='store_true',
+                    help='do not write the .cnf.csv companion (for sets too big for Brute-SAT)')
     args = ap.parse_args()
 
     wffs = generate(parse_sizes(args.sizes), args.per_size, args.max_body, args.max_queries,
                     args.timeout, args.brute_max_atoms, args.seed, args.start_id)
     write_pl_csv(wffs, args.out)
-    write_cnf_csv(wffs, cnf_path_for(args.out))
-    print(f"Wrote {len(wffs)} wffs to {args.out} and {cnf_path_for(args.out)}")
+    if args.no_cnf:
+        print(f"Wrote {len(wffs)} wffs to {args.out}")
+    else:
+        write_cnf_csv(wffs, cnf_path_for(args.out))
+        print(f"Wrote {len(wffs)} wffs to {args.out} and {cnf_path_for(args.out)}")
