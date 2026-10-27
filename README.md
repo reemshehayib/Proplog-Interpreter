@@ -84,3 +84,7 @@ Taking the median over the problems:
 The speedup grows with size because Brute-SAT's work doubles with every extra
 atom while Proplog's barely changes. The slowest problem for Brute-SAT
 (18 atoms) took it 1.35 seconds; Proplog solved it in microseconds.
+
+Brute-SAT searches through every possible assignment to see if one of them satisfies the problem, and in the worst case scenario may not find the correct assignment until the last check. If the SAT problem is unsatisfiable a similar sitaution arises. Potentially eeding to try every possible assignment gives Brute-SAT a time complexity of O(2^n)
+
+With Proplog however, we can take advantage of the fact that each clause has at most one positive literal. **TODO:** Explain how proplog algo takes advantage of Proplog properties and Brute-SAT does not, therefore Proplog solver is faster
