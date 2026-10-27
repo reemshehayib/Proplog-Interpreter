@@ -4,7 +4,7 @@ Solves Proplog programs in the CSV format
 
 Usage:
 
-    python3 proplog_solver.py --program proplog_file.pl.csv
+    python3 proplog_solver.py --problem proplog_file.pl.csv --results results.csv
     
 """
 
@@ -20,6 +20,7 @@ class ProplogProblem:
     names: dict[int,str]
     query: list[int]
     number_of_atoms: int
+    problem_number: int
 
 def convert_problem_to_class(problem_file):
     with open(problem_file, "r") as file:
@@ -33,10 +34,8 @@ def convert_problem_to_class(problem_file):
                 continue
             
             if information_type == 'c':#comment line
-                problem = ProplogProblem(set(), [], False, dict(), [], -1)
-                if line[-1] == 'S':
-                    problem.satisfiable = True
-                #remember already set to false by default
+                line = line.split(',')
+                problem = ProplogProblem(set(), [], line[3] == 'S', dict(), [], -1, int(line[1]))
                 problems.append(problem)
                 continue
                 
@@ -99,33 +98,39 @@ def find_assignment(problem, result):
     else:
         return None
     
-def main(problem_file: str):
-    print(f"Converting {problem_file} to data classes...")
+def main(problem_file: str, results_file: str):
     
-    start = perf_counter()
-    problems = convert_problem_to_class(problem_file=problem_file)
-    end = perf_counter()
-    conversion_time = end - start
-    
-    for problem in problems:
-        print(problem)
+    with open(results_file, "+w") as file:
+        file.write(f"problem_number,performance_time,result,assignment")
         
-        print(f"Converted in {conversion_time}")
-        
-        print(f"Solving {problem_file}...")
+        print(f"Converting {problem_file} to data classes...")
         
         start = perf_counter()
-        
-        result = solve_problem(problem=problem)
-        assignment = find_assignment(problem, result)
-        
+        problems = convert_problem_to_class(problem_file=problem_file)
         end = perf_counter()
-        performance_time = end - start
+        conversion_time = end - start
         
-        print(f"Solved in {performance_time}")
-        print(f"Result: {result}")
-        if assignment is not None:
-            print(f"Assignment: {assignment}")
+        for problem in problems:
+            print(problem)
+            
+            print(f"Converted in {conversion_time}")
+            
+            print(f"Solving {problem_file}...")
+            
+            start = perf_counter()
+            
+            result = solve_problem(problem=problem)
+            assignment = find_assignment(problem, result)
+            
+            end = perf_counter()
+            performance_time = end - start
+            
+            print(f"Solved in {performance_time}")
+            print(f"Result: {result}")
+            if assignment is not None:
+                print(f"Assignment: {assignment}")
+            
+            file.write(f"{problem.problem_number},{performance_time},{result},{assignment}\n")
     
     
 if __name__=='__main__':
@@ -134,5 +139,8 @@ if __name__=='__main__':
     parser.add_argument('--problem', metavar='path', required=True,
                         help='proplog file name')
     
+    parser.add_argument('--results', metavar='path', required=True,
+                            help='results file name')
+    
     args = parser.parse_args()
-    main(problem_file=args.problem)
+    main(problem_file=args.problem, results_file=args.results)
