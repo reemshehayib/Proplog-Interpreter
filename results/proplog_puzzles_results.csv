@@ -1,0 +1,4 @@
+problem_id,n_vars,n_clauses,n_literals,label,status,satisfied_count,elapsed_sec,matched_label,assignment
+1,7,7,13,U,U,,2.0759180188179016e-06,True,
+2,8,9,17,U,U,,2.3730099201202393e-06,True,
+3,8,9,17,U,U,,2.2551976144313812e-06,True,
