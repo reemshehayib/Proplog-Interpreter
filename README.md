@@ -1,18 +1,48 @@
 # Proplog Interpreter
 
-Description@Joshua
+A Proplog interpreter that solves the subset of SAT problems that can be expressed as sets of Horn clauses in less than exponential time.
 
-This repository contains:
- 
-* a file format for Proplog programs, based on the CNF `.csv` format used by
-  Brute-SAT ([FORMAT.md](FORMAT.md));
-* example problems derived from logic puzzles ([examples/](examples/));
-* a wff generator that writes random Proplog programs, each labeled
-  satisfiable or not by **Brute-SAT**, with a satisfying assignment when one
-  exists;
-* a linear-time Proplog solver;
-* timing results comparing the two solvers on 287 problems, and charts.
+## Project Structure and File Descriptions
 
+```py
+.
+├── charts/  # Result graph .png files
+│   ├── proplog_time_vs_literals.png  # Proplog Solver Time v. Literal Count
+│   ├── scatter_brute_vs_proplog.png  # Proplog Solver Time v. Brute-SAT Solver Time
+│   └── time_vs_n.png                 # Proplog and Brute-SAT Solvers v. Literal Count
+├── data/  # Various Proplog problems
+│   ├── generated.pl.cnf.csv
+│   ├── generated.pl.csv
+│   ├── large.pl.csv
+│   ├── multiquery.pl.cnf.csv
+│   └── multiquery.pl.csv
+├── examples/  # Various Proplog problem examples (with logical meaning and variable names)
+│   ├── girl.pl
+│   ├── picnic.pl
+│   ├── puzzles.pl.cnf.csv
+│   ├── puzzles.pl.csv
+│   └── vacation.pl
+├── results/  # Proplog problem results
+│   ├── brute_generated_results.csv
+│   ├── brute_multiquery_results.csv
+│   ├── brute_puzzles_results.csv
+│   ├── proplog_generated_results.csv
+│   ├── proplog_large_results.csv
+│   ├── proplog_multiquery_results.csv
+│   └── proplog_puzzles_results.csv
+├── .gitignore
+├── BruteSAT.py            # Brute-SAT solver from project 1A (for comparison with Proplog solver)
+├── FORMAT.md              # Markdown document specifying the format in which Proplog should be represented by a .csv file (.pl.csv)
+├── generate_wffs.py       # Generate random Proplog (Horn) wffs
+├── make_examples.py       # Compile every examples/*.pl into one Proplog CSV file.
+├── plot_results.py        # Plot graphs found in charts/
+├── proplog_solver.py      # Proplog solver
+├── proplog_to_CSV_CNF.py  # Proplog to CNF CSV form (.pl.cnf.csv) form for Brute-SAT solver
+├── proplog_to_CSV.py      # Proplog to CSV form (as specified by FORMAT.md)
+├── README.md
+├── run_all.py             # Helper file to run all steps
+└── run_brute.py           # Run Brute-SAT steps
+```
 
 ## Requirements
  
