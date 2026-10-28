@@ -76,6 +76,10 @@ See the graphed results in `charts/` demonstrating:
 - `time_vs_n.png`: Log-log graph showing the Brute and Proplog solver times plotted against the number of atoms in the problem
 ![time_vs_n.png](./charts/time_vs_n.png)
 
+The test problems come from `generate_wffs.py`, which writes random Horn programs
+and labels each one S or U by running Brute-SAT on it; S programs also get a
+satisfying assignment.
+
 On all **263** problems that Brute-SAT could solve, the two solvers give the
 same answer. On the 24 large problems, every `S` assignment the Proplog solver
 returned was checked against every clause.
