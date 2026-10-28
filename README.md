@@ -7,9 +7,9 @@ A Proplog interpreter that solves the subset of SAT problems that can be express
 ```py
 .
 ├── charts/  # Result graph .png files
-│   ├── proplog_time_vs_literals.png  # Proplog Solver Time v. Literal Count
+│   ├── proplog_time_vs_literals.png  # Proplog Solver Time v. Number of Literals
 │   ├── scatter_brute_vs_proplog.png  # Proplog Solver Time v. Brute-SAT Solver Time
-│   └── time_vs_n.png                 # Proplog and Brute-SAT Solvers v. Literal Count
+│   └── time_vs_n.png                 # Proplog and Brute-SAT Solvers v. Atom Count
 ├── data/  # Various Proplog problems
 │   ├── generated.pl.cnf.csv
 │   ├── generated.pl.csv
@@ -70,8 +70,11 @@ python3 proplog_solver.py --problem examples/picnic.pl.csv --verbose
 
 See the graphed results in `charts/` demonstrating:
 - `proplog_time_vs_literals.png`: Proplog solver time plotted against number of literals in the problem
+![proplog_time_vs_literals.png](./charts/proplog_time_vs_literals.png)
 - `scatter_brute_vs_proplog.png`: Log-log scatterplot of Proplog solver times plotted against Brute-SAT solver times, with satisfiability indicated by color
-- `time_vs_n.png`: Log-log graph showing the Brute and Proplog solver times plotted against the number of literals in the problem
+![scatter_brute_vs_proplog.png](./charts/scatter_brute_vs_proplog.png)
+- `time_vs_n.png`: Log-log graph showing the Brute and Proplog solver times plotted against the number of atoms in the problem
+![time_vs_n.png.png](./charts/time_vs_n.png)
 
 On all **263** problems that Brute-SAT could solve, the two solvers give the
 same answer. On the 24 large problems, every `S` assignment the Proplog solver
@@ -87,8 +90,8 @@ Taking the median over the problems:
 | Problems with 15 or more atoms | **24,404x** |
  
 The speedup grows with size because Brute-SAT's work doubles with every extra
-atom while Proplog's barely changes. The slowest problem for Brute-SAT
-(18 atoms) took it 1.35 seconds; Proplog solved it in microseconds.
+atom while Proplog's barely changes. The slowest problem for Brute-SAT (18 atoms) 
+took it 1.35 seconds; Proplog solved it in microseconds.
 
 Brute-SAT searches through every possible assignment to see if one of them satisfies the problem, and in the worst case scenario may not find the correct assignment until the last check. If the SAT problem is unsatisfiable a similar sitaution arises. Potentially needing to try every possible assignment gives Brute-SAT a time complexity of O(2^n) wich is of course computationally intensive.
 
