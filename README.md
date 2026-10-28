@@ -4,7 +4,7 @@ A Proplog interpreter that solves the subset of SAT problems that can be express
 
 ## Project Structure and File Descriptions
 
-```py
+```
 .
 ├── charts/  # Result graph .png files
 │   ├── proplog_time_vs_literals.png  # Proplog Solver Time v. Number of Literals
@@ -37,7 +37,7 @@ A Proplog interpreter that solves the subset of SAT problems that can be express
 ├── make_examples.py       # Compile every examples/*.pl into one Proplog CSV file.
 ├── plot_results.py        # Plot graphs found in charts/
 ├── proplog_solver.py      # Proplog solver
-├── proplog_to_CSV_CNF.py  # Proplog to CNF CSV form (.pl.cnf.csv) form for Brute-SAT solver
+├── proplog_to_CSV_CNF.py  # Proplog to CNF CSV form (.pl.cnf.csv) for Brute-SAT solver
 ├── proplog_to_CSV.py      # Proplog to CSV form (as specified by FORMAT.md)
 ├── README.md
 ├── run_all.py             # Helper file to run all steps
@@ -74,14 +74,14 @@ See the graphed results in `charts/` demonstrating:
 - `scatter_brute_vs_proplog.png`: Log-log scatterplot of Proplog solver times plotted against Brute-SAT solver times, with satisfiability indicated by color
 ![scatter_brute_vs_proplog.png](./charts/scatter_brute_vs_proplog.png)
 - `time_vs_n.png`: Log-log graph showing the Brute and Proplog solver times plotted against the number of atoms in the problem
-![time_vs_n.png.png](./charts/time_vs_n.png)
+![time_vs_n.png](./charts/time_vs_n.png)
 
 On all **263** problems that Brute-SAT could solve, the two solvers give the
 same answer. On the 24 large problems, every `S` assignment the Proplog solver
 returned was checked against every clause.
  
 **Speedup** is how many times faster Proplog is than Brute-SAT on the same
-problem (Brute-SAT's time divided by Proplog's time). These were run on Ricky-Bobby
+problem (Brute-SAT's time divided by Proplog's time). These were run on Ricky-Bobby.
 Taking the median over the problems:
  
 | Problems | Median speedup |
@@ -93,6 +93,6 @@ The speedup grows with size because Brute-SAT's work doubles with every extra
 atom while Proplog's barely changes. The slowest problem for Brute-SAT (18 atoms) 
 took it 1.35 seconds; Proplog solved it in microseconds.
 
-Brute-SAT searches through every possible assignment to see if one of them satisfies the problem, and in the worst case scenario may not find the correct assignment until the last check. If the SAT problem is unsatisfiable a similar sitaution arises. Potentially needing to try every possible assignment gives Brute-SAT a time complexity of O(2^n) wich is of course computationally intensive.
+Brute-SAT searches through every possible assignment to see if one of them satisfies the problem, and in the worst case scenario may not find the correct assignment until the last check. If the SAT problem is unsatisfiable a similar situation arises. Potentially needing to try every possible assignment gives Brute-SAT a time complexity of O(2^n) which is of course computationally intensive.
 
-With Proplog however, we can take advantage of the fact that each clause has at most one positive literal which allows for simple logical resolution. The Proplog algorithm, in contrast with the inherently large statespace checked by the Brute Force Solver as previously described, is able to utilize rule resolution based on established facts and forward propogate those established facts to iteratively resolve to all the conclusions that can be derived from the clauses (which are in the Horn clause form, which allows for this resolution procedure to be essentially checks of a set of previously derived facts). This iterative method yields all the facts that can be derived which is then checked against the final query clause. This procedure inherently generates a correct assignment if it exists which is far more efficient.
+With Proplog however, we can take advantage of the fact that each clause has at most one positive literal which allows for simple logical resolution. The Proplog algorithm, in contrast with the inherently large statespace checked by the Brute Force Solver as previously described, is able to utilize rule resolution based on established facts and forward propagate those established facts to iteratively resolve to all the conclusions that can be derived from the clauses (which are in the Horn clause form, which allows for this resolution procedure to be essentially checks of a set of previously derived facts). This iterative method yields all the facts that can be derived which is then checked against the final query clauses. This procedure inherently generates a correct assignment if it exists which is far more efficient.
